@@ -51,13 +51,24 @@ jobs:
             libxrandr2 \
             libdbus-glib-1-2
   
-      - name: Install Specific Version of Chrome
+      - name: Install Chrome
         run: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 78BD65473CB3BD13
-          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+          # Install dependencies
           sudo apt-get update
-          sudo apt-get install -y google-chrome-stable=114.0.5735.91-1
+          sudo apt-get install -y wget unzip
+          
+          # Download the Chrome zip file from the provided source
+          wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/114.0.5735.90-1/linux64/chrome-linux64.zip -O chrome-linux64.zip
+          
+          # Unzip the downloaded file
+          unzip chrome-linux64.zip -d chrome
+          
+          # Move the Chrome files to a location in the PATH
+          sudo mv chrome/* /usr/local/bin/
+          
+          # Clean up the downloaded zip file
+          rm chrome-linux64.zip
+          rm -rf chrome
 
       - name: Install ChromeDriver
         run: |
